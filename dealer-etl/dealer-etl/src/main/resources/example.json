@@ -1,0 +1,6 @@
+{
+	documentId: "document1"
+	properties: {
+		version: 1
+	}
+}
