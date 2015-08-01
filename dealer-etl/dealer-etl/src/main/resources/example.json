@@ -1,5 +1,5 @@
 {
-	documentId: "document1"
+	documentId: "document1",
 	properties: {
 		version: 1
 	}
