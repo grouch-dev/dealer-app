@@ -1,2 +1,4 @@
-/mongodb-tools/
-/mongodb-tools/
+/target/
+/.DS_Store
+/.project
+/bin/
