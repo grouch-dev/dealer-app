@@ -5,15 +5,15 @@
        xmlns:batch="http://www.springframework.org/schema/batch"
        xmlns:p="http://www.springframework.org/schema/p"
        xmlns:jdbc="http://www.springframework.org/schema/jdbc"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
-        http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-3.0.xsd
-        http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd">
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+    http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-3.0.xsd
+    http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd">
 
+    <bean id="mapper" class="woolcox.dealer.etl.reader.DealerMapper"/>
     <batch:job restartable="true" id="dealerImportJob">
         <batch:description>Dealer Import Job</batch:description>
 
-        <!-- Initialize local model walk map -->
         <batch:step id="dealerImportStep">
             <batch:description>Dealer Importer</batch:description>
             <batch:tasklet  throttle-limit="5">
@@ -24,8 +24,20 @@
             </batch:tasklet>
         </batch:step>
     </batch:job>
- 	
+
+    <!-- Define the repository which holds all the jobs in memory -->
+    <bean id="jobRepository" class="org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean" />
+
+    <!-- Define the job launcher to launch the intented job -->
+    <bean id="jobLauncher" class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
+        <property name="jobRepository" ref="jobRepository"/>
+    </bean>
+
+    <!-- Define an empty transaction manager -->
+    <bean id="transactionManager" class="org.springframework.batch.support.transaction.ResourcelessTransactionManager"/>
+
+
  	<context:annotation-config/>
     <context:component-scan base-package="woolcox.dealer.etl"/>
-    
+
 </beans>
